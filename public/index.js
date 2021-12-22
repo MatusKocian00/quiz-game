@@ -18,17 +18,24 @@ const numOfAnswerered = document.getElementById('numOfAnswered')
 const instructionButton = document.getElementById('instructionButton')
 
 
-
-
 let correctOrder = []
 let currentLevel;
 let resultPoints = 0
+let usedTasks = []
 
 let quizState = {
     "points": 0,
-    "questions": 2,
+    "questions": 5,
     "answeredQuestions": 0,
 }
+
+if (localStorage.getItem('points') != null) quizState.points = parseInt(localStorage.getItem('points'))
+else quizState.points = 0
+
+if (localStorage.getItem('answeredQuestions') != null) quizState.answeredQuestions = parseInt(localStorage.getItem('answeredQuestions'))
+else quizState.answeredQuestions = 0
+
+
 const changeState = () => {
     numOfAnswerered.innerHTML = `${quizState.answeredQuestions} / ${quizState.questions}`
     showPoints.innerHTML = `${quizState.points} points`
@@ -37,16 +44,23 @@ const changeState = () => {
 const resetQuizState = () => {
     quizState.points = 0;
     quizState.answeredQuestions = 0;
+    usedTasks = []
+    localStorage.setItem("usedTasks", JSON.stringify(usedTasks));
+    localStorage.setItem('points', 0)
+    localStorage.setItem('answeredQuestions', 0)
     changeState()
 }
 
 const setPoints = (points) => {
     quizState.points += points;
     if (quizState.points <= 0) quizState.points = 0;
+    localStorage.setItem('points', quizState.points)
 }
 
 const setQuestions = (number) => {
     quizState.answeredQuestions += number
+    console.log(quizState.answeredQuestions)
+
 
 }
 
@@ -125,27 +139,6 @@ new Sortable.create(quizAnswers, {
     animation: 150,
     group: 'quiz',
     dataIdAttr: 'id',
-    store: {
-        /**
-         * Get the order of elements. Called once during initialization.
-         * @param   {Sortable}  sortable
-         * @returns {Array}
-         */
-        get: function (sortable) {
-            var order = localStorage.getItem("order");
-            return order ? order.split(',') : [];
-
-        },
-
-        /**
-         * Save the order of elements. Called onEnd (when the item is dropped).
-         * @param {Sortable}  sortable
-         */
-        set: function (sortable) {
-            var order = sortable.toArray();
-            localStorage.setItem("order", order.join(','));
-        }
-    },
 })
 
 resetButton.addEventListener('click', () => {
@@ -187,19 +180,25 @@ const showQuizQuestion = (level) => {
             return response.json();
         })
         .then(data => {
-            let tasks = []
+            filteredTasks = data.questions.filter(task => {
+                return !usedTasks.find(filter => {
+                    return filter.id === task.id;
+                }) && task.level == level;
+            });
 
-            for (let i = 0; i < data.questions.length; i++) {
-                let taskLevel = data.questions[i].level
-                if (taskLevel == level) {
-                    let task = data.questions[i]
-                    tasks.push(task)
-                }
+            if (filteredTasks.length == 0) {
+                alert('please choose different question')
             }
 
-            let myTask = randomTask(tasks)
-            let question = myTask.question;
+            let myTask = randomTask(filteredTasks)
 
+
+            usedTasks.push(myTask)
+            console.log(usedTasks)
+            localStorage.setItem("usedTasks", JSON.stringify(usedTasks));
+
+
+            let question = myTask.question;
             // question 
             let questionElement = document.createElement('h3')
             questionElement.innerHTML = question
@@ -232,10 +231,8 @@ submitTask.addEventListener('click', () => {
     quizFinalAnswers.childNodes.forEach(element => {
         myOrder.push(element.id)
     })
-
-
+    localStorage.setItem('answeredQuestions', quizState.answeredQuestions)
     let result = findInArray(myOrder, correctOrder)
-    console.log(result)
     checkResult(result, resultPoints)
 
 })
@@ -254,7 +251,6 @@ const checkResult = (result, resultPoints) => {
     }
 
     else if (result) {
-
         setPoints(resultPoints)
         smallHeader.innerHTML = 'Success'
         smallParagraph.innerHTML = `Great ! You answered correctly you get ${resultPoints}. Your total points now are ${quizState.points}.`
