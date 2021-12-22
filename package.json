@@ -1,0 +1,24 @@
+{
+	"name": "vanilla-quiz",
+	"version": "1.0.0",
+	"main": "app.js",
+	"homepage": "https://webte1.fei.stuba.sk/~xkocian/quiz-game/",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"prod": "NODE_ENV=production postcss src/style.css -o public/style.css",
+		"build": "postcss build  src/tailwind.css -o public/style.css"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"live-server": "^1.2.1",
+		"postcss-cli": "^9.1.0",
+		"prefixer": "^0.0.3"
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.0",
+		"postcss": "^8.4.5",
+		"tailwindcss": "^3.0.7"
+	},
+	"description": ""
+}
