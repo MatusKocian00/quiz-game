@@ -15,13 +15,14 @@ const smallHeader = document.getElementById('smallHeader')
 const okayButton = document.getElementById('okayButton')
 const showPoints = document.getElementById('points')
 const numOfAnswerered = document.getElementById('numOfAnswered')
-const instructionButton = document.getElementById('instructionButton')
+const instructionButtons = document.getElementsByClassName('instructionButton')
 
 
 let correctOrder = []
 let currentLevel;
 let resultPoints = 0
 let usedTasks = []
+let started = false
 
 let quizState = {
     "points": 0,
@@ -29,11 +30,40 @@ let quizState = {
     "answeredQuestions": 0,
 }
 
-if (localStorage.getItem('points') != null) quizState.points = parseInt(localStorage.getItem('points'))
-else quizState.points = 0
+for (let i = 0; i < instructionButtons.length; i++) {
+    instructionButtons[i].addEventListener('click', () => {
+        smallHeader.innerHTML = 'Instructions'
+        smallParagraph.innerHTML = 'Welcome to quiz game. You goal is to answer 10 questions by sorting or choosing the correct answer by draging them into blue square also in correct order. You can choose what level of question u want, the harder level, more points you get.'
+        toggleModal('small-modal', true);
+    })
+}
 
-if (localStorage.getItem('answeredQuestions') != null) quizState.answeredQuestions = parseInt(localStorage.getItem('answeredQuestions'))
-else quizState.answeredQuestions = 0
+
+const checkLocalStorage = () => {
+
+    if (localStorage.getItem('points') != null) {
+        quizState.points = parseInt(localStorage.getItem('points'))
+    }
+    else quizState.points = 0
+
+    if (localStorage.getItem('answeredQuestions') != null) {
+        quizState.answeredQuestions = parseInt(localStorage.getItem('answeredQuestions'))
+    }
+    else quizState.answeredQuestions = 0
+    if ((parseInt(localStorage.getItem('answeredQuestions')) != 0) || localStorage.getItem('started') == 'true') quizStartButton.innerHTML = 'Continue'
+}
+
+checkLocalStorage()
+
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
 
 
 const changeState = () => {
@@ -48,6 +78,8 @@ const resetQuizState = () => {
     localStorage.setItem("usedTasks", JSON.stringify(usedTasks));
     localStorage.setItem('points', 0)
     localStorage.setItem('answeredQuestions', 0)
+    localStorage.setItem('started', false)
+    quizStartButton.innerHTML = 'Start'
     changeState()
 }
 
@@ -59,7 +91,6 @@ const setPoints = (points) => {
 
 const setQuestions = (number) => {
     quizState.answeredQuestions += number
-    console.log(quizState.answeredQuestions)
 
 
 }
@@ -105,15 +136,13 @@ const changeToLevelPage = () => {
 
 }
 
-instructionButton.addEventListener('click', () => {
-    smallHeader.innerHTML = 'Instructions'
-    smallParagraph.innerHTML = 'Welcome to quiz game. You goal is to answer 10 questions by sorting or choosing the correct answer by draging them into blue square also in correct order. You can choose what level of question u want, the harder level, more points you get.'
-    toggleModal('small-modal', true);
-})
+
 
 quizStartButton.addEventListener('click', () => {
+    started = true;
     levelPage.classList.remove('hidden')
     startPage.classList.add('hidden')
+    localStorage.setItem('started', true)
 
 })
 okayButton.addEventListener('click', () => {
@@ -194,7 +223,6 @@ const showQuizQuestion = (level) => {
 
 
             usedTasks.push(myTask)
-            console.log(usedTasks)
             localStorage.setItem("usedTasks", JSON.stringify(usedTasks));
 
 
@@ -206,6 +234,7 @@ const showQuizQuestion = (level) => {
             quizQuestion.appendChild(questionElement)
 
             // answers
+            shuffleArray(myTask.answers)
             myTask.answers.forEach(taskAnswer => {
                 //console.log(taskAnswer)
                 let answer = document.createElement('div')

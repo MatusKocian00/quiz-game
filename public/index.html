@@ -72,8 +72,8 @@
 						Start
 					</button>
 					<button
-						id="instructionButton"
 						class="
+							instructionButton
 							shadow-lg shadow-mygray
 							bg-mygray
 							hover:bg-myblack
@@ -85,7 +85,7 @@
 							rounded
 						"
 					>
-						Instruction
+						Instructions
 					</button>
 				</div>
 			</div>
@@ -200,6 +200,26 @@
 				>
 					Reset
 				</button>
+				<button
+					data-modal-toggle="small-modal"
+					class="
+						instructionButton
+						bg-mygray
+						shadow-lg shadow-mygray
+						hover:bg-myblack
+						text-mywhite
+						font-bold
+						py-2
+						px-4
+						border border-myblack
+						rounded
+						top-0
+						right-0
+						relative
+					"
+				>
+					Instructions
+				</button>
 			</div>
 		</div>
 
@@ -233,8 +253,14 @@
 			<div id="quizTask" class="mx-2">
 				<div id="quizQuestion" class="pt-8 pb-8"></div>
 				<div id="quizAnswerContainer" class="flex h-96">
-					<div id="quizAnswers" class="bg-mygray w-1/2 flex flex-col items-center justify-evenly mr-4 rounded-2xl"></div>
-					<div id="quizFinalAnswers" class="bg-myblue w-1/2 flex flex-col items-center justify-evenly rounded-2xl"></div>
+					<div
+						id="quizAnswers"
+						class="bg-mygray w-1/2 flex flex-col items-center justify-evenly mr-4 rounded-2xl min-h-1/2"
+					></div>
+					<div
+						id="quizFinalAnswers"
+						class="bg-myblue w-1/2 flex flex-col items-center justify-evenly rounded-2xl min-h-1/2"
+					></div>
 				</div>
 				<div class="flex justify-center align-middle my-2">
 					<button
