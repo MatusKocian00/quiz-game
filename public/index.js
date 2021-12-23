@@ -43,13 +43,21 @@ const checkLocalStorage = () => {
 
     if (localStorage.getItem('points') != null) {
         quizState.points = parseInt(localStorage.getItem('points'))
+
     }
-    else quizState.points = 0
+    else {
+        quizState.points = 0
+        localStorage.setItem('points', 0)
+    }
 
     if (localStorage.getItem('answeredQuestions') != null) {
         quizState.answeredQuestions = parseInt(localStorage.getItem('answeredQuestions'))
     }
-    else quizState.answeredQuestions = 0
+    else {
+        quizState.answeredQuestions = 0
+        localStorage.setItem('answeredQuestions', 0)
+    }
+
     if ((parseInt(localStorage.getItem('answeredQuestions')) != 0) || localStorage.getItem('started') == 'true') quizStartButton.innerHTML = 'Continue'
 }
 
