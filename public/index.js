@@ -16,6 +16,7 @@ const okayButton = document.getElementById('okayButton')
 const showPoints = document.getElementById('points')
 const numOfAnswerered = document.getElementById('numOfAnswered')
 const instructionButtons = document.getElementsByClassName('instructionButton')
+const smallAnswer = document.getElementById('smallAnswer')
 
 
 let correctOrder = []
@@ -26,7 +27,7 @@ let started = false
 
 let quizState = {
     "points": 0,
-    "questions": 5,
+    "questions": 10,
     "answeredQuestions": 0,
 }
 
@@ -108,6 +109,7 @@ const toStartPage = () => {
     startPage.classList.remove('hidden')
     smallHeader.innerHTML = 'Restart'
     smallParagraph.innerHTML = `Game has been reseted`
+    smallAnswer.innerHTML = ''
     resetQuizState()
 }
 
@@ -141,6 +143,7 @@ const changeToLevelPage = () => {
     quizQuestion.innerHTML = ''
     quizAnswers.innerHTML = ''
     quizFinalAnswers.innerHTML = ''
+
 
 }
 
@@ -192,6 +195,7 @@ backFromQuizButton.addEventListener('click', () => {
         setPoints(-(resultPoints / 2))
         smallHeader.innerHTML = 'You skipped the question'
         smallParagraph.innerHTML = `You lost ${resultPoints} points.`
+        smallAnswer.innerHTML = ''
         toggleModal('small-modal', true);
         changeToLevelPage()
     }
@@ -256,6 +260,8 @@ const showQuizQuestion = (level) => {
 
             // order
             correctOrder = myTask.correctOrder
+            myAnswer = correctOrder[0]
+
             // changing screens
             quizDiv.classList.remove('hidden')
             levelPage.classList.add('hidden')
@@ -279,12 +285,14 @@ const checkResult = (result, resultPoints) => {
         setPoints(resultPoints)
         smallHeader.innerHTML = 'You have finished the game.'
         smallParagraph.innerHTML = `Great your last answer was correct !. You get ${resultPoints}. Your total points now are ${quizState.points}. The game will be restarted.`
+
     }
 
     else if (!result && quizState.answeredQuestions >= quizState.questions) {
         setPoints(-resultPoints)
         smallHeader.innerHTML = 'You have finished the game'
         smallParagraph.innerHTML = `Oh crap, your last answer was not correct !. You lost ${resultPoints}. Your total points now are ${quizState.points}. The game will be restarted.`
+        smallAnswer.innerHTML = `<strong>Correct answer:</strong> ${myAnswer.toString()}`
     }
 
     else if (result) {
@@ -296,5 +304,6 @@ const checkResult = (result, resultPoints) => {
         setPoints(-resultPoints)
         smallHeader.innerHTML = 'Bad answer'
         smallParagraph.innerHTML = `Oh, crap ! Your answer is not correct. You lost ${resultPoints} points. Your total points now are ${quizState.points}.`
+        smallAnswer.innerHTML = `<strong>Correct answer:</strong> ${myAnswer.toString()}`
     }
 }

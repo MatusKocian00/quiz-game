@@ -17,7 +17,7 @@
 		{
 			"level": "1",
 			"id": "2",
-			"question": "Which number(s) is NOT odd.",
+			"question": "Which number(s) is odd.",
 			"answers": ["10", "12", "9", "45", "100", "42", "0"],
 			"correctOrder": [
 				["9", "45"],
@@ -60,7 +60,7 @@
 			"question": "How many wheels does car have",
 			"id": "6",
 			"answers": ["1", "2", "3", "4"],
-			"correctOrder": [["1"]]
+			"correctOrder": [["4"]]
 		},
 		{
 			"level": "1",
@@ -150,8 +150,8 @@
 			"level": "2",
 			"id": "18",
 			"question": "Which sport is not played with ball",
-			"answers": ["Football", "Basketball", "Volleyball", "Tennis", "Rugby"],
-			"correctOrder": [["Rugby"]]
+			"answers": ["Football", "Basketball", "Volleyball", "Tennis", "Chess"],
+			"correctOrder": [["Chess"]]
 		},
 		{
 			"level": "2",
