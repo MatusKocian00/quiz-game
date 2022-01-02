@@ -35,6 +35,7 @@ for (let i = 0; i < instructionButtons.length; i++) {
     instructionButtons[i].addEventListener('click', () => {
         smallHeader.innerHTML = 'Instructions'
         smallParagraph.innerHTML = 'Welcome to quiz game. You goal is to answer 10 questions by sorting or choosing the correct answer by draging them into blue square also in correct order. You can choose what level of question u want, the harder level, more points you get.'
+        smallAnswer.innerHTML = ''
         toggleModal('small-modal', true);
     })
 }
